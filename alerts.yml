@@ -1,0 +1,19 @@
+groups:
+- name: WebFlaskContainerAlerts
+  rules:
+  - alert: HighCPUUsage
+    expr: sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service="app"}[5m])) > 0.8
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU usage detected"
+      description: "CPU usage for app container exceeds 80% for 2 minutes."
+  - alert: HighMemoryUsage
+    expr: container_memory_usage_bytes{container_label_com_docker_compose_service="app"} > 500000000  # 500 MB
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High memory usage detected"
+      description: "Memory usage for app container exceeds 500MB for 2 minutes."
